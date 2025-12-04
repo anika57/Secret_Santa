@@ -1,46 +1,77 @@
-/* csv-upload.component.css */
-
+/* Wrapper spacing */
 .csv-upload-wrapper {
-    /* Ensures the card styling is applied if the wrapper isn't a direct card */
     margin-bottom: 20px;
+    padding: 15px;
 }
 
-/* Align file input elements horizontally */
+/* Horizontal layout for desktop */
 .input-group {
     display: flex;
     align-items: center;
-    gap: 10px; /* Space between input and button */
+    gap: 10px;
     margin-bottom: 15px;
 }
 
-/* Specific styling for the file input element */
+/* File input styling */
 input[type="file"] {
-    flex-grow: 1; /* Allows the file input to take up most of the space */
-    width: auto; /* Override 100% width from global style */
-    padding: 6px; /* Smaller padding for file type */
+    flex-grow: 1;
+    width: auto;
+    padding: 6px;
 }
 
+/* Info text */
 small {
     display: block;
     color: #888;
     margin-top: 5px;
 }
 
+/* Center image */
 .santa-list {
   display: block;
-  margin: 0 auto;
+  margin: 10px auto;
 }
 
-/* Universal responsive image class */
+/* Universal responsive image */
 .responsive-img {
+  max-width: 100%;
+  height: auto;
   display: block;
   margin: 0 auto;
-  max-width: 100%;   /* Prevents overflow on small screens */
-  height: auto;      /* Maintains aspect ratio */
 }
 
-/* Optional: Add smooth scaling on hover */
 .responsive-img:hover {
   transform: scale(1.02);
   transition: 0.2s ease-in-out;
+}
+
+/* -----------------------------------
+   📱 MOBILE RESPONSIVE (Below 600px)
+----------------------------------- */
+@media (max-width: 600px) {
+
+  .csv-upload-wrapper {
+    padding: 12px;
+  }
+
+  /* Stack input and button */
+  .input-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  input[type="file"] {
+    width: 100%;
+  }
+
+  .modern-button {
+    width: 100%;        /* Full width button on mobile */
+    padding: 10px;
+  }
+
+  .card-title {
+    font-size: 1.1rem;  /* Slightly smaller heading */
+    text-align: center;
+  }
+
 }
