@@ -1,0 +1,14 @@
+<div class="modern-card csv-upload-wrapper">
+  <h3 class="card-title">Upload Participants via Excel/CSV 📄</h3>
+  <img class="responsive-img santa-list" 
+       alt="santa-list" 
+       src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExb202Mjk0MGFzdHEyOG0xcGtncmZyNm1pNWNvOGszd3BxN3F2OXRxcCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MD2SRGrdReIFzGAtGb/giphy.gif">
+  <div class="input-group">
+    <input type="file" (change)="onFileChange($event)" accept=".csv, .xlsx" />
+    <button (click)="upload()" [disabled]="loading" class="modern-button">Upload</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Uploading...</div>
+  <div *ngIf="error" class="error">{{error}}</div>
+  <small>Columns must include: **name, email**</small>
+</div>

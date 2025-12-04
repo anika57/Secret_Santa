@@ -1,0 +1,44 @@
+<div class="card p-3">
+  <h3>Preview & Generate Pairs</h3>
+
+  <!-- Show participants -->
+  <div *ngIf="participants?.length">
+    <p><strong>Participants ({{participants.length}}):</strong></p>
+    <ul>
+      <li *ngFor="let p of participants">
+        {{p.name}}
+        <span *ngIf="p.email">({{p.email}})</span>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="!participants || participants.length === 0">
+    <p>No participants yet. Upload CSV or add manually.</p>
+  </div>
+
+  <!-- Buttons -->
+  <button (click)="generate()" [disabled]="loading">Generate Pairs</button>
+
+  <button 
+    (click)="sendEmails()" 
+    [disabled]="!pairsGenerated" 
+    style="margin-left: 8px;">
+    Send Emails 
+  </button>
+
+  <!-- Loading -->
+  <div *ngIf="loading">Generating...</div>
+
+  <!-- Errors -->
+  <div *ngIf="error" style="color:red">{{error}}</div>
+
+  <!-- Secret: Do NOT show actual pairs -->
+  <div *ngIf="pairsGenerated && !loading" style="margin-top:10px;">
+    <p style="color: #047b51;">
+      ✓ Pairs generated successfully!  
+      (They are hidden to keep it a Secret 🎁)
+    </p>
+    <img alt="secret-santa" class="responsive-img secret-santa" src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzZxYTVsb28yenl0NTE3N3NienQ1eWJxMHhjdnRiNGZ3Mjl3NWtuYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0HlFmeJotqRVc8SY/giphy.gif" />
+    <p style="color: #047b51;">"—Kevin Malone, who got himself for Secret Santa… but don’t worry, my code ensures you won’t!"</p>
+  </div>
+</div>

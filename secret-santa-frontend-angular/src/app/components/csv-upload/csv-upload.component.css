@@ -1,0 +1,46 @@
+/* csv-upload.component.css */
+
+.csv-upload-wrapper {
+    /* Ensures the card styling is applied if the wrapper isn't a direct card */
+    margin-bottom: 20px;
+}
+
+/* Align file input elements horizontally */
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between input and button */
+    margin-bottom: 15px;
+}
+
+/* Specific styling for the file input element */
+input[type="file"] {
+    flex-grow: 1; /* Allows the file input to take up most of the space */
+    width: auto; /* Override 100% width from global style */
+    padding: 6px; /* Smaller padding for file type */
+}
+
+small {
+    display: block;
+    color: #888;
+    margin-top: 5px;
+}
+
+.santa-list {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Universal responsive image class */
+.responsive-img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;   /* Prevents overflow on small screens */
+  height: auto;      /* Maintains aspect ratio */
+}
+
+/* Optional: Add smooth scaling on hover */
+.responsive-img:hover {
+  transform: scale(1.02);
+  transition: 0.2s ease-in-out;
+}

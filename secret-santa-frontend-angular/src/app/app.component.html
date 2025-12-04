@@ -1,0 +1,46 @@
+<div class="modern-christmas-background">
+  <div class="modern-container">
+    <h1 class="modern-title">{{title}}</h1>
+    <p class="modern-subtitle">Upload participants via CSV or add manually, then generate and preview Secret Santa pairs.</p>
+
+    <div *ngIf="currentState === 'start'" class="modern-card mode-selection-card">
+      <h3 class="card-title">How would you like to add participants?</h3>
+      <div class="button-group">
+        <button class="modern-button" (click)="currentState = 'csv'">
+          Upload Participants
+        </button>
+        <button class="modern-button" (click)="currentState = 'manual'">
+          Manually Add Participants
+        </button>
+      </div>
+      <p class="card-footer">Already have participants? <a href="#" (click)="currentState = 'preview'">Skip to Pair Generation</a></p>
+    </div>
+
+    <div *ngIf="currentState === 'csv'">
+  <button class="modern-button back-button" (click)="currentState = 'start'">
+    ← Back
+  </button>
+  <csv-upload (participantsLoaded)="onParticipants($event)"></csv-upload>
+</div>
+
+ <div *ngIf="currentState === 'manual'">
+  <button class="modern-button back-button" (click)="currentState = 'start'">
+    ← Back
+  </button>
+  <app-participant-form (participantAdded)="onParticipantsAdded($event)"></app-participant-form>
+</div>
+
+
+    <preview-pairs 
+      *ngIf="participants.length > 0 || currentState === 'preview'" 
+      [participants]="participants">
+    </preview-pairs>
+    
+    <div *ngIf="currentState === 'manual'" class="modern-card done-adding-card">
+      <button class="modern-button secondary-button" (click)="currentState = 'preview'">
+        Done Adding Participants
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,31 @@
+/* participant-form.component.css */
+
+.form-field-group {
+    margin-bottom: 15px;
+}
+
+/* Align the 'Add' button to the left */
+button {
+    margin-top: 10px;
+    width: auto; /* Don't make the add button full width */
+    padding: 12px 30px;
+}
+
+.santa-ho{
+    display: block;
+    margin: 0 auto;
+}
+
+/* Universal responsive image class */
+.responsive-img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;   /* Prevents overflow on small screens */
+  height: auto;      /* Maintains aspect ratio */
+}
+
+/* Optional: Add smooth scaling on hover */
+.responsive-img:hover {
+  transform: scale(1.02);
+  transition: 0.2s ease-in-out;
+}

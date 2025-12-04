@@ -1,0 +1,20 @@
+<div class="modern-card form-participant-wrapper">
+  <h3 class="card-title">Manually Add Participant 🧑‍🎄</h3>
+  <img alt="ho-ho-ho" class="responsive-img santa-ho" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXZkdHh3dWthNzF6YTNhcGJnNnI4anNzZTM0MGd5YmVudXVpc3p0cCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/YwznkNaLldLgLMQrGC/giphy.gif"/>
+  <div class="form-field-group">
+    <label for="name-input">Name:</label>
+    <input id="name-input" [(ngModel)]="name" placeholder="Full name" type="text" />
+  </div>
+  
+  <div class="form-field-group">
+    <label for="email-input">Email:</label>
+    <input id="email-input" [(ngModel)]="email" placeholder="email@example.com" type="email" />
+  </div>
+  
+  <div class="form-field-group">
+    <label for="notes-input">Notes (optional):</label>
+    <input id="notes-input" [(ngModel)]="notes" placeholder="e.g., favorite color, gift preferences" type="text" />
+  </div>
+  
+  <button (click)="add()" class="modern-button">Add Participant</button>
+</div>

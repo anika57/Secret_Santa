@@ -1,0 +1,299 @@
+
+/* --- General Body & Background --- */
+.modern-christmas-background {
+    background-image: url('/bg.jpg'); 
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    min-height: 100vh;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 20px; 
+    box-sizing: border-box;
+}
+
+.modern-container {
+    max-width: 700px; 
+    width: 100%; 
+    margin: 0 auto;
+    padding: 30px; 
+    background-color: rgba(255, 255, 255, 0.95); 
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    text-align: center; 
+}
+
+/* --- Typography --- */
+.modern-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; 
+    color: #ff4734; 
+    font-size: 2.8em;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px; 
+}
+
+.modern-subtitle {
+    font-family: 'Lato', sans-serif; 
+    color: #6B6B6B; 
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* --- Card Styling --- */
+.modern-card {
+    background-color: #fcfcfc; 
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); 
+    text-align: left;
+}
+
+.card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: #06b279; 
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.card-footer {
+    font-family: 'Lato', sans-serif;
+    color: #888;
+    font-size: 0.9em;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.card-footer a {
+    color: #06b279; 
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.card-footer a:hover {
+    text-decoration: underline;
+}
+
+/* --- Buttons --- */
+.modern-button {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4281f; 
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.05em;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    margin: 5px; 
+    min-width: 220px; 
+}
+
+.modern-button:hover {
+    background-color: #EF9A9A; 
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.modern-button:disabled {
+    background-color: #BDBDBD; 
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.secondary-button {
+    background-color: #06b279; 
+    color: white;
+}
+
+.secondary-button:hover {
+    background-color: #A5D6A7; 
+}
+
+.button-group {
+    display: flex;
+    justify-content: center; 
+    flex-wrap: wrap; 
+    margin-bottom: 20px;
+}
+
+/* --- Form Elements --- */
+input[type="file"], 
+input[type="text"], 
+input[type="email"],
+input[type="number"] { 
+    width: calc(100% - 20px); 
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #CCCCCC;
+    border-radius: 6px;
+    font-family: 'Lato', sans-serif;
+    font-size: 1em;
+    box-sizing: border-box; 
+}
+
+input:focus {
+    border-color: #f4281f; 
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(229, 115, 115, 0.2);
+}
+
+label {
+    font-family: 'Lato', sans-serif;
+    font-weight: 600;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* --- List Styles --- */
+ul, ol {
+    padding-left: 25px;
+    margin-top: 15px;
+}
+
+li {
+    font-family: 'Lato', sans-serif;
+    color: #ff4734;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+/* --- Utility/Error --- */
+.error {
+    color: #FF7043; 
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.loading {
+    color: #06b279; 
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .modern-title {
+        font-size: 2em;
+    }
+    .modern-button {
+        min-width: unset;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    .modern-container {
+        padding: 20px;
+    }
+}
+
+
+/* --- Card Styles --- */
+.modern-card {
+    background-color: #fcfcfc; 
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    text-align: left;
+}
+
+.card-title, h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: #06b279; 
+    font-size: 1.6em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+label {
+    font-family: 'Lato', sans-serif;
+    font-weight: 600;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+input[type="file"], 
+input[type="text"], 
+input[type="email"],
+input {
+    width: 100%; 
+    padding: 12px;
+    margin-top: 4px;
+    margin-bottom: 15px;
+    border: 1px solid #CCCCCC;
+    border-radius: 6px;
+    font-family: 'Lato', sans-serif;
+    font-size: 1em;
+    box-sizing: border-box; 
+}
+
+input:focus {
+    border-color: #f4281f; 
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(229, 115, 115, 0.2);
+}
+
+/* --- Buttons --- */
+.modern-button, button {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4281f; 
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1em;
+    transition: background-color 0.2s;
+    display: inline-block; 
+}
+
+.modern-button:hover, button:hover:not(:disabled) {
+    background-color: #EF9A9A;
+    transform: translateY(-1px);
+}
+
+.modern-button:disabled, button:disabled {
+    background-color: #BDBDBD;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.secondary-button {
+    background-color: #06b279; 
+}
+
+.secondary-button:hover:not(:disabled) {
+    background-color: #A5D6A7;
+}
+
+.back-button {
+  background-color: white;
+  border: none;
+  color: #f4281f;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+  background-color: transparent !important;
+}
