@@ -14,7 +14,7 @@ const app = express();
 
 // ===== CORS: allow only your Netlify frontend =====
 app.use(cors({
-  origin: 'https://idyllic-taffy-1ef859.netlify.app', // Replace with your Netlify URL
+  origin: 'https://idyllic-taffy-1ef859.netlify.app/', 
   methods: ['GET','POST','OPTIONS'],
   credentials: true
 }));

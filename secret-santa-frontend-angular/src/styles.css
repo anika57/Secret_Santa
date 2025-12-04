@@ -1,5 +1,10 @@
 
 /* --- General Body & Background --- */
+body {
+  font-family: 'Mountains of Christmas';
+   letter-spacing: 2px;
+}
+
 .modern-christmas-background {
     background-image: url('/bg.jpg'); 
     background-size: cover;
@@ -26,7 +31,6 @@
 
 /* --- Typography --- */
 .modern-title {
-    font-family: 'Montserrat', sans-serif;
     font-weight: 700; 
     color: #ff4734; 
     font-size: 2.8em;
@@ -35,7 +39,6 @@
 }
 
 .modern-subtitle {
-    font-family: 'Lato', sans-serif; 
     color: #6B6B6B; 
     font-size: 1.1em;
     margin-bottom: 30px;
@@ -54,7 +57,7 @@
 }
 
 .card-title {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Mountains of Christmas';
     font-weight: 600;
     color: #06b279; 
     font-size: 1.6em;
@@ -63,7 +66,7 @@
 }
 
 .card-footer {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Mountains of Christmas';
     color: #888;
     font-size: 0.9em;
     margin-top: 20px;
@@ -82,7 +85,7 @@
 
 /* --- Buttons --- */
 .modern-button {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Mountains of Christmas';
     background-color: #f4281f; 
     color: white;
     border: none;
@@ -94,6 +97,7 @@
     transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
     margin: 5px; 
     min-width: 220px; 
+    letter-spacing: 2px;
 }
 
 .modern-button:hover {
@@ -136,7 +140,7 @@ input[type="number"] {
     margin-bottom: 15px;
     border: 1px solid #CCCCCC;
     border-radius: 6px;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Mountains of Christmas';
     font-size: 1em;
     box-sizing: border-box; 
 }
@@ -148,7 +152,7 @@ input:focus {
 }
 
 label {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Mountains of Christmas';
     font-weight: 600;
     color: #555;
     display: block;
@@ -162,7 +166,7 @@ ul, ol {
 }
 
 li {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Mountains of Christmas';
     color: #ff4734;
     margin-bottom: 8px;
     line-height: 1.4;
@@ -211,7 +215,7 @@ li {
 }
 
 .card-title, h3 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Mountains of Christmas';
     font-weight: 600;
     color: #06b279; 
     font-size: 1.6em;
@@ -221,7 +225,7 @@ li {
 }
 
 label {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Mountains of Christmas';
     font-weight: 600;
     color: #555;
     display: block;
@@ -239,7 +243,7 @@ input {
     margin-bottom: 15px;
     border: 1px solid #CCCCCC;
     border-radius: 6px;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Mountains of Christmas';
     font-size: 1em;
     box-sizing: border-box; 
 }
@@ -252,7 +256,7 @@ input:focus {
 
 /* --- Buttons --- */
 .modern-button, button {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Mountains of Christmas';
     background-color: #f4281f; 
     color: white;
     border: none;
