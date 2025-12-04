@@ -1,23 +1,30 @@
-const dotenv = require('dotenv');
-dotenv.config();
+// index.js
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
 const Papa = require('papaparse');
 const XLSX = require('xlsx');
 const fs = require('fs');
-const bodyParser = require('body-parser');
 const path = require('path');
+const bodyParser = require('body-parser');
+const nodemailer = require('nodemailer');
 
 const app = express();
-app.use(cors());
+
+// ===== CORS: allow only your Netlify frontend =====
+app.use(cors({
+  origin: 'https://idyllic-taffy-1ef859.netlify.app', // Replace with your Netlify URL
+  methods: ['GET','POST','OPTIONS'],
+  credentials: true
+}));
+
 app.use(bodyParser.json());
 
+// ===== File upload setup =====
 const upload = multer({ dest: path.join(__dirname, 'uploads/') });
 
-/**
- * Parse CSV
- */
+// ===== CSV parser =====
 function parseCsv(filePath) {
   const csvString = fs.readFileSync(filePath, 'utf8');
   const parsed = Papa.parse(csvString, { header: true, skipEmptyLines: true });
@@ -31,9 +38,7 @@ function parseCsv(filePath) {
   })).filter(p => p.name);
 }
 
-/**
- * Parse XLSX
- */
+// ===== XLSX parser =====
 function parseXlsx(filePath) {
   const workbook = XLSX.readFile(filePath);
   const sheet = workbook.Sheets[workbook.SheetNames[0]]; 
@@ -46,9 +51,7 @@ function parseXlsx(filePath) {
   })).filter(p => p.name);
 }
 
-/**
- * Smart parser (CSV or XLSX)
- */
+// ===== Unified parser =====
 function parseUploadedFile(filePath, originalName) {
   const ext = path.extname(originalName).toLowerCase();
   if (ext === '.csv') return parseCsv(filePath);
@@ -56,14 +59,12 @@ function parseUploadedFile(filePath, originalName) {
   throw new Error('Unsupported file format. Upload CSV or XLSX.');
 }
 
-/**
- * Upload endpoint (accepts CSV or XLSX)
- */
+// ===== Upload endpoint =====
 app.post('/api/upload', upload.single('file'), (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
     const participants = parseUploadedFile(req.file.path, req.file.originalname);
-    fs.unlink(req.file.path, () => {});
+    fs.unlink(req.file.path, () => {}); // cleanup
     res.json(participants);
   } catch (err) {
     console.error(err);
@@ -71,9 +72,7 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
   }
 });
 
-/**
- * Shuffle helper
- */
+// ===== Pairing helper =====
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -81,9 +80,7 @@ function shuffle(arr) {
   }
 }
 
-/**
- * Pairing endpoint
- */
+// ===== Pairing endpoint =====
 app.post('/api/pair', (req, res) => {
   try {
     const participants = (req.body.participants || [])
@@ -102,8 +99,8 @@ app.post('/api/pair', (req, res) => {
       let valid = true;
 
       pairs = participants.map((giver, i) => ({ giver, receiver: receivers[i] }));
-
       if (pairs.some(p => p.giver.name === p.receiver.name)) valid = false;
+
       if (valid) break;
       attempts++;
     }
@@ -117,11 +114,7 @@ app.post('/api/pair', (req, res) => {
   }
 });
 
-/**
- * Email sending endpoint
- */
-const nodemailer = require('nodemailer');
-
+// ===== Send emails endpoint =====
 app.post('/api/send-emails', async (req, res) => {
   const pairs = req.body.pairs || [];
   if (!pairs.length) return res.status(400).json({ message: 'No pairs to email' });
@@ -129,6 +122,7 @@ app.post('/api/send-emails', async (req, res) => {
   try {
     let transporter;
 
+    // Use real SMTP if provided in .env
     if (process.env.SMTP_HOST && process.env.SMTP_USER) {
       transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
@@ -137,6 +131,7 @@ app.post('/api/send-emails', async (req, res) => {
         auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
       });
     } else {
+      // Fallback: Ethereal test account
       const testAccount = await nodemailer.createTestAccount();
       transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
@@ -163,10 +158,7 @@ app.post('/api/send-emails', async (req, res) => {
             <p>Hello <strong>${pair.giver.name}</strong>,</p>
             <p>You have been assigned to give a gift to:</p>
             <h3 style="color:#2a9d8f;">${pair.receiver.name}</h3>
-
-            <img src="https://media4.giphy.com/media/K90ckojkohXfW/giphy.gif"
-                 style="width:200px; margin-top:20px;" />
-
+            <img src="https://media4.giphy.com/media/K90ckojkohXfW/giphy.gif" style="width:200px; margin-top:20px;" />
             <p style="margin-top:20px;">Happy Secret Santa! 🎅🎁</p>
           </div>
         `
@@ -188,8 +180,6 @@ app.post('/api/send-emails', async (req, res) => {
   }
 });
 
-/**
- * Start server
- */
+// ===== Start server =====
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
