@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment'; 
 
 export interface Participant {
   name: string;
@@ -12,7 +13,7 @@ export interface Participant {
   providedIn: 'root'
 })
 export class SantaService {
-  private base = 'http://localhost:3000/api';
+  private base = environment.apiUrl; // ← dynamic
 
   constructor(private http: HttpClient) {}
 
