@@ -14,11 +14,10 @@ const app = express();
 /* ------------------ CORS ------------------ */
 app.use(
   cors({
-    origin: ["http://localhost:4200"],  // only Angular dev server
+    origin: ["http://localhost:4200"], // allowed in local env
     methods: ["GET", "POST", "OPTIONS"],
   })
 );
-
 
 /* ------------------ JSON ------------------ */
 app.use(bodyParser.json());
@@ -35,7 +34,7 @@ function parseCsv(filePath) {
   const csvString = fs.readFileSync(filePath, "utf8");
   const parsed = Papa.parse(csvString, {
     header: true,
-    skipEmptyLines: true
+    skipEmptyLines: true,
   });
 
   return parsed.data
@@ -94,8 +93,9 @@ app.post("/api/pair", (req, res) => {
   if (!participants || !Array.isArray(participants))
     return res.status(400).json({ error: "Invalid participants" });
 
-  // ensure every participant has a name
-  participants = participants.filter((p) => p && p.name && p.name.trim());
+  participants = participants.filter(
+    (p) => p && p.name && p.name.trim()
+  );
 
   if (participants.length < 2)
     return res.status(400).json({ error: "Need at least 2 participants" });
@@ -113,7 +113,6 @@ app.post("/api/pair", (req, res) => {
     }));
 
     if (!pairs.some((p) => p.giver.name === p.receiver.name)) break;
-
     attempts++;
   }
 
@@ -123,7 +122,7 @@ app.post("/api/pair", (req, res) => {
   res.json(pairs);
 });
 
-/* ------------------ Email Sending (BREVO RECOMMENDED) ------------------ */
+/* ------------------ Send Emails ------------------ */
 app.post("/api/send-emails", async (req, res) => {
   const pairs = req.body.pairs || [];
 
@@ -131,13 +130,12 @@ app.post("/api/send-emails", async (req, res) => {
     let transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
-      secure: false, // IMPORTANT for Brevo with port 587
+      secure: false,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
-      }
+      },
     });
-
 
     const results = [];
 
@@ -163,13 +161,20 @@ app.post("/api/send-emails", async (req, res) => {
   }
 });
 
-/* ------------------ Server ------------------ */
+/* ------------------ Serve Angular Frontend ------------------ */
+const distPath = path.join(
+  __dirname,
+  "../secret-santa-frontend-angular/dist/secret-santa-frontend-angular"
+);
+
+// Serve all static assets
+app.use(express.static(distPath));
+
+// Catch-all fallback for Angular routing (Express 5 safe)
+app.use((req, res) => {
+  res.sendFile(path.join(distPath, "index.html"));
+});
+
+/* ------------------ Start Server ------------------ */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-/* ------------------ Serve Angular Frontend ------------------ */
-app.use(express.static(path.join(__dirname, '../secret-santa-frontend-angular/dist/secret-santa-frontend-angular')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../secret-santa-frontend-angular/dist/secret-santa-frontend-angular/index.html'));
-});
