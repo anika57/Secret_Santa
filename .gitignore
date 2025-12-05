@@ -1,2 +1,4 @@
 # Node modules 
 .env 
+secret-santa-frontend-angular/dist/
+uploads/

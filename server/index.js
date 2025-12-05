@@ -14,14 +14,11 @@ const app = express();
 /* ------------------ CORS ------------------ */
 app.use(
   cors({
-    origin: [
-      "http://localhost:4200",
-      "https://idyllic-taffy-1ef859.netlify.app",
-      "https://secret-santa-cwjo.onrender.com"
-    ],
+    origin: ["http://localhost:4200"],  // only Angular dev server
     methods: ["GET", "POST", "OPTIONS"],
   })
 );
+
 
 /* ------------------ JSON ------------------ */
 app.use(bodyParser.json());
@@ -169,3 +166,10 @@ app.post("/api/send-emails", async (req, res) => {
 /* ------------------ Server ------------------ */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+/* ------------------ Serve Angular Frontend ------------------ */
+app.use(express.static(path.join(__dirname, '../secret-santa-frontend-angular/dist/secret-santa-frontend-angular')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../secret-santa-frontend-angular/dist/secret-santa-frontend-angular/index.html'));
+});
