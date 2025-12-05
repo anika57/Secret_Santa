@@ -13,7 +13,7 @@ export interface Participant {
   providedIn: 'root'
 })
 export class SantaService {
-  private base = environment.apiUrl; // ← dynamic
+  private base = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

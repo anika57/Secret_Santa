@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core'; // <-- Import EventEmitter and Output
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Participant } from '../../services/santa.service'; // Assuming Participant interface is imported
+import { Participant } from '../../services/santa.service';
 
 @Component({
   selector: 'app-participant-form',
@@ -11,26 +11,23 @@ import { Participant } from '../../services/santa.service'; // Assuming Particip
 })
 export class ParticipantFormComponent {
 
-  @Output() participantAdded = new EventEmitter<Participant>(); // <-- ADD THIS @Output
+  @Output() participantAdded = new EventEmitter<Participant>();
 
   name: string = '';
   email: string = '';
   notes: string = '';
 
   add() {
-    // Cast to Participant type if necessary, or just use the structure
+    if (!this.name.trim()) return;
+
     const participant: Participant = { 
       name: this.name,
-      email: this.email || undefined, // Use undefined if email is empty string
-      notes: this.notes || undefined  // Use undefined if notes is empty string
+      email: this.email || undefined,
+      notes: this.notes || undefined
     };
 
-    console.log("Participant added:", participant);
+    this.participantAdded.emit(participant);
 
-    // FIX: Emit the event so the parent component knows
-    this.participantAdded.emit(participant); // <-- EMIT THE EVENT
-
-    // Clear inputs after adding
     this.name = '';
     this.email = '';
     this.notes = '';

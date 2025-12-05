@@ -1,68 +1,79 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const multer = require('multer');
-const Papa = require('papaparse');
-const XLSX = require('xlsx');
-const fs = require('fs');
-const path = require('path');
-const bodyParser = require('body-parser');
-const nodemailer = require('nodemailer');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const multer = require("multer");
+const Papa = require("papaparse");
+const XLSX = require("xlsx");
+const fs = require("fs");
+const path = require("path");
+const bodyParser = require("body-parser");
+const nodemailer = require("nodemailer");
 
 const app = express();
 
-// ---------- CORS ----------
-app.use(cors({
-  origin: [
-    'http://localhost:4200',
-    'https://idyllic-taffy-1ef859.netlify.app'
-  ],
-  methods: ['GET', 'POST', 'OPTIONS'],
-  credentials: true
-}));
+/* ------------------ CORS ------------------ */
+app.use(
+  cors({
+    origin: [
+      "http://localhost:4200",
+      "https://idyllic-taffy-1ef859.netlify.app",
+      "https://secret-santa-cwjo.onrender.com"
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+  })
+);
 
+/* ------------------ JSON ------------------ */
 app.use(bodyParser.json());
 
-// ---------- File Upload ----------
-const upload = multer({ dest: path.join(__dirname, 'uploads/') });
+/* ------------------ Ensure uploads folder exists ------------------ */
+const uploadPath = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath);
 
-// ---------- CSV Parser ----------
+/* ------------------ Multer ------------------ */
+const upload = multer({ dest: uploadPath });
+
+/* ------------------ CSV Parser ------------------ */
 function parseCsv(filePath) {
-  const csvString = fs.readFileSync(filePath, 'utf8');
-  const parsed = Papa.parse(csvString, { header: true, skipEmptyLines: true });
-  return parsed.data.map(r => ({
-    name: (r.name || r.Name || '').trim(),
-    email: (r.email || r.Email || '').trim(),
-    notes: (r.notes || r.Notes || '').trim()
-  })).filter(p => p.name);
+  const csvString = fs.readFileSync(filePath, "utf8");
+  const parsed = Papa.parse(csvString, {
+    header: true,
+    skipEmptyLines: true
+  });
+
+  return parsed.data
+    .map((r) => ({
+      name: (r.name || r.Name || "").trim(),
+      email: (r.email || r.Email || "").trim(),
+      notes: (r.notes || r.Notes || "").trim(),
+    }))
+    .filter((p) => p.name);
 }
 
-// ---------- XLSX Parser ----------
+/* ------------------ XLSX Parser ------------------ */
 function parseXlsx(filePath) {
   const workbook = XLSX.readFile(filePath);
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+  const json = XLSX.utils.sheet_to_json(sheet, { defval: "" });
 
-  return json.map(r => ({
-    name: (r.name || r.Name || '').trim(),
-    email: (r.email || r.Email || '').trim(),
-    notes: (r.notes || r.Notes || '').trim()
-  })).filter(p => p.name);
+  return json
+    .map((r) => ({
+      name: (r.name || r.Name || "").trim(),
+      email: (r.email || r.Email || "").trim(),
+      notes: (r.notes || r.Notes || "").trim(),
+    }))
+    .filter((p) => p.name);
 }
 
-function parseUploadedFile(filePath, originalName) {
-  const ext = path.extname(originalName).toLowerCase();
-  if (ext === ".csv") return parseCsv(filePath);
-  if (ext === ".xlsx") return parseXlsx(filePath);
-  throw new Error("Unsupported file format");
-}
-
-// ---------- Upload Endpoint ----------
+/* ------------------ Upload Endpoint ------------------ */
 app.post("/api/upload", upload.single("file"), (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-    const participants = parseUploadedFile(req.file.path, req.file.originalname);
+    const participants = req.file.originalname.endsWith(".csv")
+      ? parseCsv(req.file.path)
+      : parseXlsx(req.file.path);
+
     fs.unlinkSync(req.file.path);
 
     res.json(participants);
@@ -71,7 +82,7 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   }
 });
 
-// ---------- Shuffle ----------
+/* ------------------ Shuffle ------------------ */
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -79,14 +90,20 @@ function shuffle(arr) {
   }
 }
 
-// ---------- Pairing ----------
+/* ------------------ Pairing ------------------ */
 app.post("/api/pair", (req, res) => {
-  const participants = req.body.participants || [];
+  let participants = req.body.participants;
+
+  if (!participants || !Array.isArray(participants))
+    return res.status(400).json({ error: "Invalid participants" });
+
+  // ensure every participant has a name
+  participants = participants.filter((p) => p && p.name && p.name.trim());
 
   if (participants.length < 2)
     return res.status(400).json({ error: "Need at least 2 participants" });
 
-  let receivers = participants.map(p => ({ ...p }));
+  let receivers = participants.map((p) => ({ ...p }));
   let attempts = 0;
   let pairs = [];
 
@@ -95,10 +112,10 @@ app.post("/api/pair", (req, res) => {
 
     pairs = participants.map((giver, i) => ({
       giver,
-      receiver: receivers[i]
+      receiver: receivers[i],
     }));
 
-    if (!pairs.some(p => p.giver.name === p.receiver.name)) break;
+    if (!pairs.some((p) => p.giver.name === p.receiver.name)) break;
 
     attempts++;
   }
@@ -109,18 +126,21 @@ app.post("/api/pair", (req, res) => {
   res.json(pairs);
 });
 
-// ---------- Email Sending ----------
+/* ------------------ Email Sending (BREVO RECOMMENDED) ------------------ */
 app.post("/api/send-emails", async (req, res) => {
   const pairs = req.body.pairs || [];
 
   try {
     let transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: false, // IMPORTANT for Brevo with port 587
       auth: {
         user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
+        pass: process.env.SMTP_PASS,
       }
     });
+
 
     const results = [];
 
@@ -134,19 +154,18 @@ app.post("/api/send-emails", async (req, res) => {
         from: process.env.EMAIL_FROM,
         to: pair.giver.email,
         subject: "Your Secret Santa Match 🎁",
-        text: `You will give a gift to: ${pair.receiver.name}`
+        text: `You will give a gift to: ${pair.receiver.name}`,
       });
 
       results.push({ giver: pair.giver.name, status: "sent" });
     }
 
     res.json({ results });
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// ---------- Server ----------
+/* ------------------ Server ------------------ */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

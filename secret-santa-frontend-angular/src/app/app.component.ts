@@ -8,7 +8,6 @@ import { PreviewPairsComponent } from './components/preview-pairs/preview-pairs.
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  styleUrls: [],
   imports: [
     CommonModule,
     CsvUploadComponent,
@@ -17,23 +16,20 @@ import { PreviewPairsComponent } from './components/preview-pairs/preview-pairs.
   ]
 })
 export class AppComponent {
+
   title = 'Secret Santa Generator';
 
-  // 🎄 NEW: State variable to control which view is currently shown (start, csv, manual, preview)
-  currentState: 'start' | 'csv' | 'manual' | 'preview' = 'start'; 
+  currentState: 'start' | 'csv' | 'manual' | 'preview' = 'start';
 
   participants: any[] = [];
 
-  // Handles participants loaded from CSV upload
   onParticipants(event: any[]) {
     this.participants = event;
-    // Automatically switch to the preview step after a CSV upload
-    this.currentState = 'preview'; 
+    this.currentState = 'preview';
   }
 
-  // Handles participants added manually from the form
   onParticipantsAdded(event: any) {
     this.participants.push(event);
-    // Stay in 'manual' state to allow adding more participants
+    // keep user in manual mode to add more
   }
 }
